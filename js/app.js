@@ -1,8 +1,10 @@
 const APP = {
 
-	Player: function () {
+	Player: function ( options = {} ) {
 
 		let renderer;
+		let renderEnabled = true;
+		const alpha = options.alpha !== undefined ? options.alpha : true;
 
 		const loader = new THREE.ObjectLoader();
 		let camera, scene;
@@ -34,14 +36,16 @@ const APP = {
 			if ( project.renderer === 'WebGPURenderer' ) {
 
 				const { WebGPURenderer } = await import( 'three/webgpu' );
-				renderer = new WebGPURenderer( { antialias: true, reversedDepthBuffer: true } );
+				renderer = new WebGPURenderer( { antialias: true, alpha: alpha, reversedDepthBuffer: true } );
 				await renderer.init();
 
 			} else {
 
-				renderer = new THREE.WebGLRenderer( { antialias: true, reversedDepthBuffer: true } );
+				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: alpha, reversedDepthBuffer: true } );
 
 			}
+
+			renderer.setClearColor( 0x000000, alpha ? 0 : 1 );
 
 			renderer.setPixelRatio( window.devicePixelRatio );
 
@@ -51,9 +55,15 @@ const APP = {
 			if ( project.toneMappingExposure !== undefined ) renderer.toneMappingExposure = project.toneMappingExposure;
 
 			dom.appendChild( renderer.domElement );
+			dom.style.position = 'relative';
+			renderer.domElement.style.position = 'relative';
+			renderer.domElement.style.zIndex = '1';
 			this.canvas = renderer.domElement;
+			this.renderer = renderer;
 
-			this.setScene( loader.parse( json.scene ) );
+			const loadedScene = loader.parse( json.scene );
+			if ( alpha ) loadedScene.background = null;
+			this.setScene( loadedScene );
 			this.setCamera( loader.parse( json.camera ) );
 
 			events = {
@@ -132,6 +142,7 @@ const APP = {
 		this.setScene = function ( value ) {
 
 			scene = value;
+			this.scene = value; // Expose loaded scene so external modules (e.g. XR8Controller) can access it.
 
 		};
 
@@ -144,6 +155,12 @@ const APP = {
 		this.setClearColor = function ( color ) {
 
 			renderer.setClearColor( color );
+
+		};
+
+		this.setRenderEnabled = function ( enabled ) {
+
+			renderEnabled = enabled;
 
 		};
 
@@ -211,7 +228,7 @@ const APP = {
 
 			}
 
-			renderer.render( scene, camera );
+			if ( renderEnabled ) renderer.render( scene, camera );
 
 			prevTime = time;
 
