@@ -1,0 +1,26 @@
+#overlay{background:radial-gradient(ellipse at 50% 30%,#1a1c24,#101114 70%);font-family:'Space Mono',monospace;overflow:auto;padding:20px;box-sizing:border-box}
+#overlay .red{position:absolute;inset:0;opacity:.5;background:radial-gradient(circle at 20% 25%,rgba(110,92,255,.28),transparent 35%),radial-gradient(circle at 80% 70%,rgba(78,205,255,.16),transparent 38%);animation:hyder 9s ease-in-out infinite alternate;pointer-events:none}
+@keyframes hyder{to{transform:scale(1.15) translate(2%,-2%)}}
+#overlay .inner{position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;margin:auto}
+#overlay .logo{width:64px;height:64px;color:#6E5CFF;filter:drop-shadow(0 0 16px rgba(110,92,255,.7))}
+#overlay .estado{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.22em;color:#4ECDFF;padding:6px 12px;border:1px solid rgba(78,205,255,.35);border-radius:99px}
+#overlay .estado i{width:6px;height:6px;border-radius:50%;background:#4ECDFF;animation:hypu 1.2s infinite}
+@keyframes hypu{50%{opacity:.3}}
+#overlay h1{margin:0;font-family:Outfit,sans-serif;font-weight:700;font-size:clamp(44px,13vw,66px);line-height:.98}
+#overlay h1 em{font-style:normal;background:linear-gradient(90deg,#6E5CFF,#4ECDFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+#overlay p{margin:0;font-size:12.5px;line-height:1.6;color:#C9CDD6;max-width:340px}
+#overlay .modos{list-style:none;margin:0;padding:0;display:flex;gap:8px}
+#overlay .modos li{padding:8px 14px;border:1.5px solid #6E5CFF;border-radius:12px;background:rgba(110,92,255,.1)}
+#overlay .modos b{font-size:11px;letter-spacing:.12em;color:#6E5CFF}
+#start-button{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:340px;padding:17px 22px;border-radius:16px;font-family:Outfit,sans-serif;font-weight:600;font-size:17px;color:#fff;border:0;background:linear-gradient(135deg,#6E5CFF,#4b8bff);box-shadow:0 10px 32px rgba(110,92,255,.45);cursor:pointer;margin-top:4px;transition:transform .15s}
+#start-button:active{transform:scale(.97)}
+#start-button svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#start-button .ring{position:absolute;inset:-5px;border-radius:21px;border:1.5px solid rgba(110,92,255,.6);animation:hyrg 2s ease-out infinite;pointer-events:none}
+@keyframes hyrg{0%{transform:scale(.97);opacity:1}100%{transform:scale(1.07);opacity:0}}
+#start-button.busy{display:none}
+#progress-container{width:100%;max-width:300px}
+#progress-bar-track{height:4px;border-radius:4px;background:rgba(201,205,214,.15)}
+#progress-bar-fill{background:linear-gradient(90deg,#6E5CFF,#4ECDFF)!important}
+#progress-label{font-size:11px;letter-spacing:.1em;color:#C9CDD6}
+#overlay .nota{font-size:10px;opacity:.7}
+#overlay .volver{font-size:11px;letter-spacing:.1em;color:#C9CDD6;text-decoration:none;padding:8px}

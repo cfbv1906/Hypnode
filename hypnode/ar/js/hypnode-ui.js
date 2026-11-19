@@ -43,7 +43,7 @@ const INFO = {
 
 const HIDE_DELAY = 1200; // tolera pérdidas breves del tracking
 
-let ui, panel, iconBox, titleEl, textEl, buttons, topEl, filterBtn, toastEl, toastTimer;
+let ui, panel, iconBox, titleEl, textEl, buttons, topEl, toastEl, toastTimer;
 let current = null;      // modo abierto
 let typeTimer = null;
 let hideTimer = null;
@@ -92,21 +92,28 @@ function build() {
         ui.addEventListener(type, (ev) => ev.stopPropagation());
     });
 
-    // Botón superior: abre el filtro facial
+    // Barra superior: volver al inicio + ir al filtro facial (página aparte)
     topEl = document.createElement('div');
     topEl.id = 'hy-top';
     topEl.innerHTML = `
-        <button id="hy-filter-btn">
+        <a id="hy-home-btn" href="../" aria-label="Volver al inicio">
+            <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+        </a>
+        <a id="hy-filter-btn" href="../filtro/">
             <svg viewBox="0 0 24 24"><polygon points="12,2 20,6 19,15 12,22 5,15 4,6"/>
                 <circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>
             FILTRO FACIAL
-        </button>`;
+        </a>`;
     document.body.appendChild(topEl);
     ['pointerdown', 'touchstart'].forEach((type) => {
         topEl.addEventListener(type, (ev) => ev.stopPropagation());
     });
-    filterBtn = topEl.querySelector('button');
-    filterBtn.addEventListener('click', openFilterMode);
+    topEl.querySelector('#hy-home-btn').addEventListener('click', (ev) => {
+        ev.preventDefault(); playSfx('atras'); setTimeout(() => { location.href = '../'; }, 140);
+    });
+    topEl.querySelector('#hy-filter-btn').addEventListener('click', (ev) => {
+        ev.preventDefault(); playSfx('filtro'); setTimeout(() => { location.href = '../filtro/'; }, 260);
+    });
 
     toastEl = document.createElement('div');
     toastEl.id = 'hy-toast';
@@ -127,20 +134,6 @@ export function hideToast() {
     toastEl?.classList.remove('on');
 }
 
-async function openFilterMode() {
-    playSfx('filtro');
-    filterBtn.disabled = true;
-    try {
-        const m = await import('./hypnode-filter.js');
-        await m.openFilter();
-    } catch (e) {
-        console.error('hypnode-ui: no se pudo abrir el filtro', e);
-        toast('No se pudo abrir el filtro facial.');
-    } finally {
-        filterBtn.disabled = false;
-    }
-}
-
 function typeText(text) {
     clearInterval(typeTimer);
     textEl.classList.remove('done');
@@ -159,6 +152,7 @@ function toggle(modo) {
     if (current === modo) { playSfx('cerrar'); closePanel(); return; }
     current = modo;
     playSfx(modo);
+    try { navigator.vibrate && navigator.vibrate(25); } catch (e) {}
     const info = INFO[modo];
     buttons.forEach((b) => b.classList.toggle('active', b.dataset.modo === modo));
     iconBox.innerHTML = info.icono;
@@ -176,6 +170,7 @@ function closePanel() {
 
 function show() {
     clearTimeout(hideTimer);
+    if (!ui.classList.contains('visible')) playSfx('detectado');
     ui.classList.add('visible');
 }
 
@@ -223,17 +218,6 @@ function watchController() {
 function showTop() {
     topEl.classList.add('visible');
 }
-
-// El filtro facial pausa el modo tarjeta: ocultamos botones y panel mientras está abierto.
-window.addEventListener('hypnode:filter-open', () => {
-    clearTimeout(hideTimer);
-    ui.classList.remove('visible');
-    closePanel();
-    topEl.classList.remove('visible');
-});
-window.addEventListener('hypnode:filter-close', () => {
-    if (attached?.started) showTop();
-});
 
 build();
 watchController();

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Hypnode · Dream Scan</title>
+<meta name="theme-color" content="#101114" />
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml" />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/scan.css" />
+</head>
+<body data-emo="neutro">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo-nodo" viewBox="0 0 64 64">
+    <polygon points="32,5 59,25 49,57 15,57 5,25" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+    <g fill="currentColor"><circle cx="32" cy="5" r="3.6"/><circle cx="59" cy="25" r="3.6"/><circle cx="49" cy="57" r="3.6"/><circle cx="15" cy="57" r="3.6"/><circle cx="5" cy="25" r="3.6"/></g>
+  </symbol>
+</svg>
+
+<div id="stage"><video id="cam" playsinline muted></video><canvas id="fx"></canvas></div>
+<div id="vineta"></div>
+<div id="flash"></div>
+
+<!-- HUD -->
+<div id="hud" class="off">
+  <div class="top">
+    <a class="atras" href="../" data-sfx="atras" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <div class="marca"><svg><use href="#logo-nodo"/></svg><span>Hypnode</span></div>
+    <a class="ar-link" href="../ar/" data-sfx="click">AR</a>
+  </div>
+
+  <div class="lectura">
+    <div class="tag"><i></i><span id="h-tag">DREAM SCAN · ESCANEANDO</span></div>
+    <div class="titulo" id="h-titulo">Esperando tu gesto</div>
+    <div class="fila"><span>ACTIVIDAD REM</span><b id="h-rem">—</b></div>
+    <div class="fila"><span>RITMO ONÍRICO</span><b id="h-bpm">— BPM</b></div>
+    <div class="fila"><span>OUTPUT LUZ</span><b id="h-luz">—</b></div>
+  </div>
+
+  <div id="aviso">Busca tu cara…</div>
+  <div id="guia">Sonríe · baja las cejas · haz pucheros · cierra los ojos</div>
+
+  <div class="abajo">
+    <div id="chips">
+      <button data-emo="feliz"><b>FELIZ</b><small>Sonríe</small></button>
+      <button data-emo="estres"><b>ESTRÉS</b><small>Cejas abajo</small></button>
+      <button data-emo="triste"><b>TRISTE</b><small>Pucheros</small></button>
+      <button data-emo="calma"><b>CALMA</b><small>Ojos cerrados</small></button>
+    </div>
+    <div class="acciones">
+      <button id="mute" aria-label="Silenciar"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="off" d="M16 9l5 6M21 9l-5 6"/></svg></button>
+      <button id="foto" aria-label="Tomar foto"><i></i></button>
+      <button id="giro" aria-label="Reiniciar estado"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA DE INICIO -->
+<section id="intro" class="pantalla">
+  <div class="red"></div>
+  <div class="intro-in">
+    <svg class="logo"><use href="#logo-nodo"/></svg>
+    <div class="estado"><i></i><span>REM CYCLE ACTIVE</span></div>
+    <h1>Dream<br/><em>Scan</em></h1>
+    <p>Tu rostro revela tu estado onírico. Hypnode lo lee, lo traduce en luz y le pone banda sonora.</p>
+    <ul class="gestos">
+      <li data-emo="feliz"><i></i><b>FELIZ</b><span>Sonríe</span></li>
+      <li data-emo="estres"><i></i><b>ESTRÉS</b><span>Baja las cejas</span></li>
+      <li data-emo="triste"><i></i><b>TRISTE</b><span>Haz pucheros</span></li>
+      <li data-emo="calma"><i></i><b>CALMA</b><span>Cierra los ojos</span></li>
+    </ul>
+    <button id="iniciar" class="cta"><span class="ring"></span><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"/><path d="M4 21c1-4.5 4-6.5 8-6.5s7 2 8 6.5"/></svg><span>Iniciar escaneo</span></button>
+    <p class="nota">Necesitamos tu cámara frontal y sonido. Nada se graba ni se envía.</p>
+    <a class="volver" href="../" data-sfx="atras">← Volver al inicio</a>
+  </div>
+</section>
+
+<!-- CARGA -->
+<section id="carga" class="pantalla off">
+  <div class="red"></div>
+  <div class="intro-in">
+    <svg class="logo girando"><use href="#logo-nodo"/></svg>
+    <h2 id="c-titulo">Conectando sensores…</h2>
+    <div class="barra"><i id="c-barra"></i></div>
+    <ul class="pasos">
+      <li id="p1">Cámara frontal</li>
+      <li id="p2">Modelo facial</li>
+      <li id="p3">Motor de emociones</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ERROR -->
+<section id="error" class="pantalla off">
+  <div class="red"></div>
+  <div class="intro-in">
+    <svg class="logo"><use href="#logo-nodo"/></svg>
+    <h2>No pudimos activar el escáner</h2>
+    <p id="e-texto">Revisa el permiso de cámara del navegador y vuelve a intentarlo.</p>
+    <button class="cta" onclick="location.reload()"><span>Reintentar</span></button>
+    <a class="volver" href="../">← Volver al inicio</a>
+  </div>
+</section>
+
+<script type="module" src="js/scan.js"></script>
+</body>
+</html>

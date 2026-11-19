@@ -1,5 +1,5 @@
 // Hypnode — sonidos UX sintetizados con Web Audio (sin archivos de audio).
-// playSfx('luz' | 'sonido' | 'forma' | 'modelo' | 'cerrar')
+// playSfx('luz' | 'sonido' | 'forma' | 'modelo' | 'cerrar' | 'inicio' | 'detectado' | 'click' | 'atras')
 
 let ctx = null;
 let master = null;
@@ -36,36 +36,81 @@ function click(ctx, out, t, freq, dur, peak) {
 }
 
 export const SFX = {
-    // LUZ: arpegio ascendente brillante, como un destello
+    // LUZ: destello ascendente brillante con chisporroteo final
     luz(ctx, out) {
         const t = ctx.currentTime + 0.01;
-        [659.25, 880, 1318.5].forEach((f, i) => tone(ctx, out, { f, t: t + i * 0.07, d: 0.3, peak: 0.22 }));
-        tone(ctx, out, { type: 'triangle', f: 2637, t: t + 0.2, d: 0.25, peak: 0.07 });
+        tone(ctx, out, { type: 'sawtooth', f: 300, f2: 2400, t, a: 0.01, d: 0.28, peak: 0.07 });
+        [659.25, 880, 1318.5, 1760, 2637].forEach((f, i) => tone(ctx, out, { f, t: t + 0.05 + i * 0.06, d: 0.4, peak: 0.3 }));
+        click(ctx, out, t + 0.02, 5000, 0.05, 0.35);
+        [3520, 4186, 3136].forEach((f, i) => tone(ctx, out, { type: 'triangle', f, t: t + 0.35 + i * 0.04, d: 0.12, peak: 0.08 }));
     },
 
-    // SONIDO: dos notas suaves con eco
+    // SONIDO: onda con vibrato + dos notas con eco largo
     sonido(ctx, out) {
         const t = ctx.currentTime + 0.01;
         const dry = ctx.createGain();
         const delay = ctx.createDelay();
         const fb = ctx.createGain();
-        delay.delayTime.value = 0.13;
-        fb.gain.value = 0.35;
+        delay.delayTime.value = 0.16;
+        fb.gain.value = 0.45;
         dry.connect(out);
         dry.connect(delay);
         delay.connect(fb).connect(delay);
         delay.connect(out);
-        tone(ctx, dry, { f: 523.25, f2: 535, t, d: 0.3, peak: 0.25 });
-        tone(ctx, dry, { f: 783.99, f2: 800, t: t + 0.09, d: 0.4, peak: 0.22 });
+        const o = ctx.createOscillator(), lfo = ctx.createOscillator(), lg = ctx.createGain(), g = ctx.createGain();
+        o.type = 'sine'; o.frequency.value = 440;
+        lfo.frequency.value = 9; lg.gain.value = 14;
+        lfo.connect(lg).connect(o.frequency);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.3, t + 0.05);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+        o.connect(g).connect(dry);
+        o.start(t); lfo.start(t); o.stop(t + 0.6); lfo.stop(t + 0.6);
+        tone(ctx, dry, { f: 523.25, t: t + 0.04, d: 0.5, peak: 0.28 });
+        tone(ctx, dry, { f: 783.99, f2: 800, t: t + 0.14, d: 0.6, peak: 0.26 });
+        tone(ctx, dry, { f: 1046.5, t: t + 0.26, d: 0.6, peak: 0.16 });
     },
 
-    // FORMA: clic mecánico seco + golpe grave + resonancia metálica
+    // FORMA: clic mecánico + golpe grave + resonancia metálica de cristal
     forma(ctx, out) {
         const t = ctx.currentTime + 0.01;
-        click(ctx, out, t, 2500, 0.03, 0.5);
-        tone(ctx, out, { f: 220, f2: 90, t, d: 0.12, peak: 0.35 });
-        tone(ctx, out, { type: 'triangle', f: 1760, t: t + 0.02, d: 0.18, peak: 0.07 });
-        tone(ctx, out, { type: 'triangle', f: 2349, t: t + 0.02, d: 0.14, peak: 0.04 });
+        click(ctx, out, t, 2500, 0.04, 0.7);
+        tone(ctx, out, { f: 200, f2: 55, t, d: 0.2, peak: 0.6 });
+        [1760, 2349, 2960, 3520].forEach((f, i) => tone(ctx, out, { type: 'triangle', f, t: t + 0.03 + i * 0.045, d: 0.3, peak: 0.12 }));
+        click(ctx, out, t + 0.2, 3500, 0.025, 0.3);
+    },
+
+    // INICIO: arranque del dispositivo (barrido grave + acorde de nodos)
+    inicio(ctx, out) {
+        const t = ctx.currentTime + 0.01;
+        const f = ctx.createBiquadFilter();
+        f.type = 'lowpass';
+        f.frequency.setValueAtTime(200, t);
+        f.frequency.exponentialRampToValueAtTime(3000, t + 0.6);
+        f.connect(out);
+        tone(ctx, f, { type: 'sawtooth', f: 82, f2: 246, t, a: 0.05, d: 0.7, peak: 0.2 });
+        [392, 523.25, 659.25, 783.99, 1046.5].forEach((fr, i) => tone(ctx, out, { f: fr, t: t + 0.25 + i * 0.07, d: 0.45, peak: 0.2 }));
+    },
+
+    // DETECTADO: la tarjeta fue reconocida (dos pings ascendentes)
+    detectado(ctx, out) {
+        const t = ctx.currentTime + 0.01;
+        tone(ctx, out, { f: 880, t, d: 0.14, peak: 0.22 });
+        tone(ctx, out, { f: 1318.5, t: t + 0.09, d: 0.3, peak: 0.24 });
+        click(ctx, out, t, 4000, 0.02, 0.2);
+    },
+
+    // CLIC genérico de botón
+    click(ctx, out) {
+        const t = ctx.currentTime + 0.01;
+        tone(ctx, out, { type: 'triangle', f: 880, f2: 1320, t, d: 0.09, peak: 0.25 });
+        click(ctx, out, t, 3000, 0.02, 0.25);
+    },
+
+    // ATRÁS / volver
+    atras(ctx, out) {
+        const t = ctx.currentTime + 0.01;
+        tone(ctx, out, { type: 'triangle', f: 700, f2: 400, t, d: 0.12, peak: 0.22 });
     },
 
     // MODELO: barrido grave que "enciende" el dispositivo + destello final
@@ -112,7 +157,7 @@ export function playSfx(name, opts) {
             if (!AC) return;
             ctx = new AC();
             master = ctx.createGain();
-            master.gain.value = 0.8;
+            master.gain.value = 1;
             const comp = ctx.createDynamicsCompressor();
             master.connect(comp).connect(ctx.destination);
         }

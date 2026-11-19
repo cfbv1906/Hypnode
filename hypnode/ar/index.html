@@ -2,10 +2,14 @@
 <html lang="en">
 
 <head>
-	<title></title>
+	<title>Hypnode · Escanea tu sueño</title>
 	<meta charset="utf-8">
 	<meta name="generator" content="Three.js Editor">
-	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+	<meta name="theme-color" content="#101114">
+	<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/hypnode-start.css">
 	<link rel="stylesheet" href="css/app.css">
 
 	<script type="importmap">
@@ -28,15 +32,31 @@
 
 	<div id="ar-container"></div>
 
-	<div class="log" id="log">asdasdsa</div>
-
 	<div id="overlay">
-		<button id="start-button">Iniciar</button>
-		<div id="progress-container">
-			<div id="progress-bar-track">
-				<div id="progress-bar-fill"></div>
+		<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+			<symbol id="logo-nodo" viewBox="0 0 64 64">
+				<polygon points="32,5 59,25 49,57 15,57 5,25" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" />
+				<g fill="currentColor"><circle cx="32" cy="5" r="3.6" /><circle cx="59" cy="25" r="3.6" /><circle cx="49" cy="57" r="3.6" /><circle cx="15" cy="57" r="3.6" /><circle cx="5" cy="25" r="3.6" /></g>
+			</symbol>
+		</svg>
+		<div class="red"></div>
+		<div class="inner">
+			<svg class="logo"><use href="#logo-nodo" /></svg>
+			<div class="estado"><i></i><span>AR · TARJETA HYPNODE</span></div>
+			<h1>Escanea<br><em>tu sueño</em></h1>
+			<p>Apunta la cámara a la tarjeta Hypnode. El dispositivo aparecerá frente a ti y podrás explorar su luz, su sonido y su forma.</p>
+			<ul class="modos">
+				<li><b>LUZ</b></li><li><b>SONIDO</b></li><li><b>FORMA</b></li>
+			</ul>
+			<button id="start-button"><span class="ring"></span><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3" /><circle cx="12" cy="12" r="3" /></svg><span id="start-label">Iniciar escaneo</span></button>
+			<div id="progress-container">
+				<div id="progress-bar-track">
+					<div id="progress-bar-fill"></div>
+				</div>
+				<div id="progress-label">Cargando... 0%</div>
 			</div>
-			<div id="progress-label">Cargando... 0%</div>
+			<p class="nota">Necesitamos tu cámara trasera. Nada se graba ni se envía.</p>
+			<a class="volver" href="../" data-sfx="atras">← Volver al inicio</a>
 		</div>
 	</div>
 
@@ -45,11 +65,11 @@
 		import * as THREE from './js/three.module.js';
 		import { APP } from './js/app.js';
 		import { MindARController } from './js/mindar/mindar_controller.js';
+		import { playSfx } from './js/hypnode-sfx.js';
 
 		window.THREE = THREE; // Used by APP Scripts.
 
-		const log = document.getElementById('log');
-		const overlay = document.getElementById('overlay');
+				const overlay = document.getElementById('overlay');
 		const startButton = document.getElementById('start-button');
 		const arContainer = document.getElementById('ar-container');
 		const progressContainer = document.getElementById('progress-container');
@@ -107,7 +127,6 @@
 				window.player = player;
 
 				setProgress(85, 'Preparando AR...');
-				log.textContent = 'initializing...';
 
 				await new Promise((resolve) => setTimeout(resolve, 10));
 
@@ -127,6 +146,10 @@
 
 		// Al darle al botón start se inicia la cámara (requiere gesto del usuario).
 		startButton.addEventListener('click', async () => {
+
+			playSfx('inicio');
+			try { navigator.vibrate && navigator.vibrate(25); } catch (e) {}
+			startButton.classList.add('busy');
 
 			progressContainer.style.display = 'flex';
 
@@ -149,17 +172,21 @@
 				setTimeout(() => overlay.remove(), 400);
 			} catch (e) {
 				console.error('Error durante la carga:', e);
-				startButton.textContent = 'Reintentar';
+				document.getElementById('start-label').textContent = 'Reintentar';
+				startButton.classList.remove('busy');
 				setProgress(0, 'Error al iniciar');
 			}
 		});
+
+		document.querySelectorAll('[data-sfx]').forEach((a) => a.addEventListener('pointerdown', () => playSfx(a.dataset.sfx)));
 
 		// Todo se carga automáticamente al abrir la página.
 		loadEverything().catch((e) => {
 			console.error('Error durante la carga automática:', e.message);
 			progressContainer.style.display = 'flex';
 			setProgress(0, 'Error al cargar');
-			startButton.textContent = 'Reintentar';
+			document.getElementById('start-label').textContent = 'Reintentar';
+				startButton.classList.remove('busy');
 		});
 
 	</script>
