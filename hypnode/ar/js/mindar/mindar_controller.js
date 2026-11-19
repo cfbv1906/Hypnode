@@ -78,7 +78,14 @@ class MindARController {
                 // el contenido quede en pie sobre el marcador. 1 unidad MindAR =
                 // ancho del marcador (= 1.65 en el editor), por eso 1/1.65 ≈ 0.6.
                 content.scale.setScalar(0.6);
-                content.rotation.set(THREE.MathUtils.degToRad(90), 0, 0);
+                // Vista de FRENTE: sin la rotación de +90°, la pantalla y el botón
+                // frontal del dispositivo miran directo a la cámara (antes se veía
+                // la parte de arriba). Se centra sobre la tarjeta y se adelanta un poco.
+                content.rotation.set(0, 0, 0);
+                content.position.set(0, -0.47, 0.3);
+                // El disco de brillo del suelo quedaría de canto: se oculta.
+                const suelo = content.getObjectByName('Brillo_Suelo');
+                if (suelo) suelo.visible = false;
 
                 anchor.group.add(content);
             }
