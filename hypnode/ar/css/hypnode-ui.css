@@ -1,0 +1,310 @@
+/* Hypnode — UI de botones sobre la realidad aumentada (LUZ / SONIDO / FORMA) */
+
+:root {
+    --hy-violet: #6E5CFF;
+    --hy-carbon: #101114;
+    --hy-cyan: #4ECDFF;
+    --hy-silver: #C9CDD6;
+}
+
+#hy-ui {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    font-family: 'Space Mono', monospace;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+#hy-ui.visible {
+    opacity: 1;
+}
+
+/* ---------- Botones ---------- */
+
+#hy-buttons {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 14px;
+}
+
+#hy-buttons button {
+    pointer-events: auto;
+    flex: 1 1 0;
+    max-width: 130px;
+    padding: 12px 0;
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: var(--hy-violet);
+    background: rgba(16, 17, 20, 0.6);
+    border: 2px solid var(--hy-violet);
+    border-radius: 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+#hy-buttons button:active {
+    transform: scale(0.96);
+}
+
+#hy-buttons button.active {
+    background: rgba(110, 92, 255, 0.28);
+    box-shadow: 0 0 16px rgba(110, 92, 255, 0.55);
+}
+
+/* ---------- Botón superior (filtro facial) ---------- */
+
+#hy-top {
+    position: fixed;
+    top: calc(14px + env(safe-area-inset-top, 0px));
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#hy-top.visible {
+    opacity: 1;
+    transform: none;
+}
+
+#hy-filter-btn {
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--hy-violet);
+    background: rgba(16, 17, 20, 0.6);
+    border: 2px solid var(--hy-violet);
+    border-radius: 999px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+#hy-top.visible #hy-filter-btn { pointer-events: auto; }
+#hy-filter-btn:active { transform: scale(0.96); background: rgba(110, 92, 255, 0.28); }
+#hy-filter-btn:disabled { opacity: 0.5; }
+
+#hy-filter-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linejoin: round;
+}
+
+/* ---------- Mensajes cortos ---------- */
+
+#hy-toast {
+    position: fixed;
+    left: 50%;
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    z-index: 300;
+    max-width: calc(100% - 40px);
+    padding: 10px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    text-align: center;
+    color: var(--hy-silver);
+    background: rgba(16, 17, 20, 0.92);
+    border: 1px solid var(--hy-violet);
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#hy-toast.on {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- Panel ---------- */
+
+#hy-panel {
+    pointer-events: auto;
+    position: absolute;
+    left: 50%;
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    width: calc(100% - 28px);
+    max-width: 380px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    color: var(--hy-silver);
+    background: rgba(16, 17, 20, 0.88);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hy-violet);
+    border-radius: 16px;
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px) scale(0.96);
+    visibility: hidden;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+}
+
+#hy-panel.open {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+    visibility: visible;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#hy-icon {
+    flex: none;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 220px;
+}
+
+#hy-title {
+    margin: 0 0 2px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--hy-violet);
+}
+
+#hy-text {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    min-height: 4.5em;
+}
+
+#hy-text::after {
+    content: '▌';
+    color: var(--hy-violet);
+    animation: hy-blink 0.8s steps(1) infinite;
+}
+
+#hy-text.done::after {
+    content: '';
+}
+
+/* ---------- Íconos (línea fina + nodos en vértices) ---------- */
+
+.hy-ico {
+    width: 64px;
+    height: 64px;
+    overflow: visible;
+}
+
+.hy-ico * {
+    fill: none;
+    stroke: var(--hy-violet);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.hy-ico .node {
+    fill: var(--hy-violet);
+    stroke: none;
+}
+
+/* LUZ: el rayo se dibuja y el núcleo brilla en cian */
+.hy-luz {
+    animation: hy-glow 1.6s ease-in-out infinite;
+}
+
+.hy-luz .bolt {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: hy-draw 1.6s ease-in-out infinite;
+}
+
+.hy-luz .node {
+    animation: hy-node 1.6s ease-in-out infinite;
+}
+
+/* SONIDO: onda que fluye y respira */
+.hy-sonido .wave {
+    transform-box: fill-box;
+    transform-origin: center;
+    stroke-dasharray: 8 6;
+    animation: hy-flow 0.9s linear infinite, hy-breathe 1.4s ease-in-out infinite;
+}
+
+.hy-sonido .wave2 {
+    opacity: 0.4;
+    animation-delay: -0.4s, -0.7s;
+}
+
+/* FORMA: la geometría gira y se contrae */
+.hy-forma {
+    animation: hy-spin 4s linear infinite;
+}
+
+.hy-forma .inner {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0.55;
+    animation: hy-pulse-shape 2s ease-in-out infinite;
+}
+
+@keyframes hy-blink { 50% { opacity: 0; } }
+
+@keyframes hy-draw {
+    0% { stroke-dashoffset: 100; }
+    50%, 80% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -100; }
+}
+
+@keyframes hy-glow {
+    0%, 100% { filter: drop-shadow(0 0 1px var(--hy-cyan)); }
+    50% { filter: drop-shadow(0 0 7px var(--hy-cyan)); }
+}
+
+@keyframes hy-node {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+@keyframes hy-flow {
+    to { stroke-dashoffset: -14; }
+}
+
+@keyframes hy-breathe {
+    0%, 100% { transform: scaleY(0.45); }
+    50% { transform: scaleY(1); }
+}
+
+@keyframes hy-spin {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+
+@keyframes hy-pulse-shape {
+    0%, 100% { transform: scale(0.35); }
+    50% { transform: scale(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hy-ico, .hy-ico * { animation: none !important; }
+    .hy-luz .bolt { stroke-dashoffset: 0; }
+}

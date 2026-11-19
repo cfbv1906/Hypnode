@@ -1,0 +1,217 @@
+/* Hypnode — filtro facial "Dream Scan" */
+
+#hf-root {
+    --emo: #FFD166;
+    --emo-rgb: 255, 209, 102;
+    --bpm: 88;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: #000;
+    font-family: 'Space Mono', monospace;
+    color: #C9CDD6;
+    overflow: hidden;
+    animation: hf-in 0.35s ease;
+}
+
+@keyframes hf-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* cámara + canvas (MindAR los posiciona dentro) */
+#hf-cam {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* resplandor de color de la emoción, late al ritmo del BPM */
+#hf-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 85% 60% at 50% 38%, rgba(var(--emo-rgb), 0.26), transparent 72%);
+    animation: hf-beat calc(60s / var(--bpm)) ease-in-out infinite;
+}
+
+@keyframes hf-beat {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+#hf-vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 100% 80% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+#hf-ui {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+    padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* ---------- encabezado ---------- */
+#hf-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 16px 0;
+}
+
+#hf-info {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.55;
+    letter-spacing: 0.06em;
+    color: var(--emo);
+    text-shadow: 0 0 10px rgba(var(--emo-rgb), 0.45), 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+#hf-info.swap > div {
+    animation: hf-swap 0.45s ease both;
+}
+#hf-info.swap > div:nth-child(2) { animation-delay: 0.07s; }
+#hf-info.swap > div:nth-child(3) { animation-delay: 0.14s; }
+
+@keyframes hf-swap {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: none; }
+}
+
+#hf-close {
+    pointer-events: auto;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(16, 17, 20, 0.55);
+    border: 1px solid rgba(201, 205, 214, 0.35);
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#hf-close:disabled { opacity: 0.35; }
+
+#hf-close svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+/* ---------- aviso (cargando / mostrar rostro) ---------- */
+#hf-hint {
+    align-self: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 8px 14px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--emo);
+    background: rgba(16, 17, 20, 0.55);
+    border: 1px solid rgba(var(--emo-rgb), 0.5);
+    border-radius: 999px;
+    opacity: 0;
+    transition: opacity 0.25s;
+    animation: hf-blink 1.4s ease-in-out infinite;
+}
+#hf-hint.on { opacity: 1; }
+
+@keyframes hf-blink { 50% { filter: brightness(0.6); } }
+
+/* ---------- parte baja ---------- */
+#hf-bottom {
+    display: flex;
+    flex-direction: column;
+}
+
+#hf-mark {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 18px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--emo);
+    opacity: 0.85;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+#hf-mark svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: var(--emo);
+    stroke-width: 2;
+    stroke-linejoin: round;
+}
+
+#hf-panel {
+    pointer-events: auto;
+    padding: 16px 16px calc(18px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(to bottom, rgba(10, 11, 13, 0.82), rgba(10, 11, 13, 0.96));
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#hf-label {
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #8A8F99;
+}
+
+#hf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+#hf-grid button {
+    padding: 13px 0;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #DADDE4;
+    background: #0B0C0F;
+    border: 1.5px solid #3A3D45;
+    border-radius: 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s, transform 0.1s;
+}
+
+#hf-grid button:active { transform: scale(0.96); }
+
+#hf-grid button.active {
+    color: var(--emo);
+    border-color: var(--emo);
+    background: rgba(var(--emo-rgb), 0.1);
+    box-shadow: 0 0 14px rgba(var(--emo-rgb), 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #hf-glow, #hf-hint { animation: none; }
+}

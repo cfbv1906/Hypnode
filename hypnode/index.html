@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hypnode · Capture your dreams</title>
+<meta name="description" content="Hypnode: neurotecnología portátil que captura y traduce tus sueños en luz, sonido y forma. Experiencia AR y filtro Dream Scan." />
+<meta name="theme-color" content="#101114" />
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/home.css" />
+</head>
+<body>
+<canvas id="red" aria-hidden="true"></canvas>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo-nodo" viewBox="0 0 64 64">
+    <polygon points="32,5 59,25 49,57 15,57 5,25" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+    <g fill="currentColor"><circle cx="32" cy="5" r="3.6"/><circle cx="59" cy="25" r="3.6"/><circle cx="49" cy="57" r="3.6"/><circle cx="15" cy="57" r="3.6"/><circle cx="5" cy="25" r="3.6"/></g>
+  </symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <a class="marca" href="#inicio" aria-label="Hypnode"><svg><use href="#logo-nodo"/></svg><span>Hypnode</span></a>
+  <nav>
+    <a href="#que-es">Producto</a>
+    <a href="#modos">Modos</a>
+    <a href="#packaging">Packaging</a>
+    <a href="#ar">AR</a>
+    <a href="#dreamscan">Dream Scan</a>
+  </nav>
+  <a class="btn mini" href="ar/" data-sfx="click">Abrir AR</a>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-txt">
+    <div class="estado"><i></i><span>REM CYCLE ACTIVE</span></div>
+    <h1>Capture<br/>your <em>dreams.</em></h1>
+    <p class="lead">Hypnode es un dispositivo de neurotecnología portátil que traduce tus sueños en <b>luz</b>, <b>sonido</b> y <b>forma</b>.</p>
+    <div class="ctas">
+      <a class="btn primario" href="ar/" data-sfx="click"><svg viewBox="0 0 24 24"><path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3"/><circle cx="12" cy="12" r="3.2"/></svg>Escanear sueño <small>AR</small></a>
+      <a class="btn secundario" href="filtro/" data-sfx="click"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"/><path d="M4 21c1-4.5 4-6.5 8-6.5s7 2 8 6.5"/></svg>Dream Scan <small>Filtro</small></a>
+    </div>
+    <ul class="datos">
+      <li><b>3</b><span>modos de salida</span></li>
+      <li><b>4</b><span>estados emocionales</span></li>
+      <li><b>REM</b><span>captura en tiempo real</span></li>
+    </ul>
+  </div>
+  <div class="hero-vis" id="vis">
+    <div class="halo"></div>
+    <img class="prod" id="prod" src="assets/img/producto.webp" alt="Dispositivo Hypnode con pantalla triangular de energía" width="1000" height="1000" />
+    <span class="etq e1">// NODOS NEURALES</span>
+    <span class="etq e2">// PANTALLA ONÍRICA</span>
+    <span class="etq e3">// NÚCLEO REM</span>
+  </div>
+  <a class="bajar" href="#que-es" aria-label="Bajar">scroll<i></i></a>
+</section>
+
+<!-- QUE ES -->
+<section class="sec" id="que-es">
+  <div class="cab"><span class="tag">01 · PRODUCTO</span><h2>Un dispositivo que escucha<br/>mientras duermes.</h2></div>
+  <div class="trio">
+    <article class="card rev"><span class="num">Q</span><h3>¿Qué es?</h3><p>Un dispositivo de neurotecnología portátil que captura y traduce tus sueños en luz, sonido y forma.</p></article>
+    <article class="card rev"><span class="num">C</span><h3>¿Cómo funciona?</h3><p>Sensores neurales no invasivos leen la actividad cerebral durante el sueño REM, codificando los datos oníricos en tiempo real.</p></article>
+    <article class="card rev"><span class="num">P</span><h3>¿Para qué sirve?</h3><p>Reproduce, analiza y comparte tus experiencias oníricas a través de tres modos de salida sensorial.</p></article>
+  </div>
+</section>
+
+<!-- MODOS -->
+<section class="sec modos" id="modos">
+  <div class="cab"><span class="tag">02 · DREAM OUTPUT</span><h2>Tres modos de salida.<br/>Un mismo sueño.</h2></div>
+  <div class="panel rev">
+    <div class="selector" role="tablist">
+      <button role="tab" class="on" data-modo="luz"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="3.5" fill="currentColor"/><g fill="currentColor"><circle cx="32" cy="8" r="2.4"/><circle cx="49" cy="15" r="2.4"/><circle cx="56" cy="32" r="2.4"/><circle cx="49" cy="49" r="2.4"/><circle cx="32" cy="56" r="2.4"/><circle cx="15" cy="49" r="2.4"/><circle cx="8" cy="32" r="2.4"/><circle cx="15" cy="15" r="2.4"/></g></svg><span>LUZ</span></button>
+      <button role="tab" data-modo="sonido"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M22 20a17 17 0 0 0 0 24M42 20a17 17 0 0 1 0 24M13 12a29 29 0 0 0 0 40M51 12a29 29 0 0 1 0 40"/><circle cx="32" cy="32" r="3.4" fill="currentColor" stroke="none"/></svg><span>SONIDO</span></button>
+      <button role="tab" data-modo="forma"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round"><path d="M32 5 59 32 32 59 5 32Z"/><path d="M32 5v54M5 32h54"/></svg><span>FORMA</span></button>
+    </div>
+    <div class="escena">
+      <div class="lienzo" id="lienzo"><canvas id="modo-canvas" width="640" height="420"></canvas></div>
+      <div class="info">
+        <div class="tipo" id="m-tag">// LUZ</div>
+        <h3 id="m-titulo">Sueños en secuencias lumínicas</h3>
+        <p id="m-texto">Convierte patrones oníricos en secuencias lumínicas inmersivas. La intensidad y el color se adaptan a la emoción dominante del sueño.</p>
+        <div class="medidor"><span>INTENSIDAD</span><div><i id="m-barra"></i></div><b id="m-val">72%</b></div>
+      </div>
+    </div>
+    <div class="pie-panel">REM CYCLE ACTIVE</div>
+  </div>
+</section>
+
+<!-- PACKAGING -->
+<section class="sec" id="packaging">
+  <div class="cab"><span class="tag">03 · PACKAGING</span><h2>Abrir la caja ya es<br/>parte del sueño.</h2></div>
+  <div class="mosaico">
+    <figure class="rev g1"><img src="assets/img/unboxing.webp" loading="lazy" alt="Unboxing de Hypnode" /><figcaption>UNBOXING</figcaption></figure>
+    <figure class="rev g2"><img src="assets/img/caja-frente.webp" loading="lazy" alt="Frente de la caja Hypnode" /><figcaption>FRONT</figcaption></figure>
+    <figure class="rev g3"><img src="assets/img/kit.webp" loading="lazy" alt="Contenido: dispositivo, cable, funda y guía" /><figcaption>KIT · DISPOSITIVO + CABLE + FUNDA</figcaption></figure>
+  </div>
+</section>
+
+<!-- AR -->
+<section class="sec ar" id="ar">
+  <div class="cab"><span class="tag">04 · EXPERIENCIA AR</span><h2>Apunta. Desbloquea.<br/>Sueña en el espacio.</h2></div>
+  <div class="ar-grid">
+    <div class="ar-pasos">
+      <ol>
+        <li class="rev"><b>01</b><div><h4>Abre la experiencia</h4><p>Toca “Escanear sueño” o escanea el QR de la tarjeta.</p></div></li>
+        <li class="rev"><b>02</b><div><h4>Apunta a la tarjeta Hypnode</h4><p>Con la cámara trasera sobre la tarjeta impresa se activa una capa de realidad aumentada.</p></div></li>
+        <li class="rev"><b>03</b><div><h4>Elige un modo</h4><p>Toca LUZ, SONIDO o FORMA y mira tus sueños proyectados en el espacio físico.</p></div></li>
+      </ol>
+      <a class="btn primario grande" href="ar/" data-sfx="click">Escanear sueño <small>AR</small></a>
+    </div>
+    <div class="ar-vis rev">
+      <img class="mano" src="assets/img/ar-mano.webp" loading="lazy" alt="Mano sosteniendo un celular con el dispositivo Hypnode en realidad aumentada" />
+      <div class="tarjeta"><img src="assets/img/tarjeta.jpg" loading="lazy" alt="Tarjeta Hypnode para escanear" /><span>TARJETA · AR TRIGGER</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DREAM SCAN -->
+<section class="sec scan" id="dreamscan" data-emo="feliz">
+  <div class="cab"><span class="tag">05 · FILTRO AR</span><h2>Dream Scan:<br/>tu cara, tu estado.</h2></div>
+  <div class="scan-grid">
+    <div class="scan-izq">
+      <div class="emos" role="tablist">
+        <button class="on" data-emo="feliz">FELIZ</button>
+        <button data-emo="triste">TRISTE</button>
+        <button data-emo="estres">ESTRÉS</button>
+        <button data-emo="calma">CALMA</button>
+      </div>
+      <div class="lectura">
+        <div class="tipo" id="e-tag">// ESTADO · FELIZ</div>
+        <h3 id="e-titulo">Sueño vívido</h3>
+        <p id="e-texto">Tonos cálidos y dorados. Frecuencia de onda alta. Asociado con sueños lúcidos positivos.</p>
+        <dl>
+          <div><dt>ACTIVIDAD REM</dt><dd id="e-rem">ALTA</dd></div>
+          <div><dt>RITMO ONÍRICO</dt><dd id="e-bpm">88 BPM</dd></div>
+          <div><dt>OUTPUT LUZ</dt><dd id="e-luz">ÁMBAR CÁLIDO</dd></div>
+        </dl>
+      </div>
+      <a class="btn secundario grande" href="filtro/" data-sfx="click">Probar Dream Scan <small>Filtro</small></a>
+    </div>
+    <div class="scan-vis">
+      <div class="aura"></div>
+      <img id="scan-img" src="assets/img/scan-feliz.webp" alt="Filtro Dream Scan en estado feliz" />
+    </div>
+  </div>
+</section>
+
+<!-- QR / CIERRE -->
+<section class="cierre" id="qr">
+  <div class="cierre-in">
+    <svg class="logo-grande"><use href="#logo-nodo"/></svg>
+    <h2>Your mind.<br/>Our technology.</h2>
+    <p class="lead">Escanea el código para llevar Hypnode en tu bolsillo.</p>
+    <div class="qr-box"><img src="assets/img/qr.png" alt="Código QR de Hypnode" width="220" height="220" /></div>
+    <div class="ctas centro">
+      <a class="btn primario" href="ar/" data-sfx="click">Escanear sueño <small>AR</small></a>
+      <a class="btn secundario" href="filtro/" data-sfx="click">Dream Scan <small>Filtro</small></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <a class="marca" href="#inicio"><svg><use href="#logo-nodo"/></svg><span>Hypnode</span></a>
+  <span>Capture your dreams.</span>
+  <span>Cristian Buitrago · Realidades Expandidas</span>
+</footer>
+
+<script type="module" src="js/home.js"></script>
+</body>
+</html>
